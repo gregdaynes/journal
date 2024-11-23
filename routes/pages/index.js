@@ -130,16 +130,20 @@ export default async function (fastify, opts) {
       .then(pages => request.transformRecordsWithJSON(pages))
 
     const blocks = await request.database('page_blocks')
+      .select()
       .where({ idPage, 'page_blocks.deleted': null })
       .leftJoin('blocks', 'page_blocks.idBlock', 'blocks.idBlock')
       .orderBy('order', 'asc')
       .then(blocks => request.transformRecordsWithJSON(blocks))
+      .catch(() => [])
+
 
     for (const block of blocks) {
       if (block.metadata.type === 'text') {
         block.output = block.payload.data
       } else if (block.metadata.type === 'javascript') {
-        block.output = eval(eval('(' + block.payload.data + ')'))
+        block.payload.data = eval(block.payload.data)
+        block.output = eval('(' + block.payload.data + ')')
         console.log({ data: block.payload.data, output: block.output })
       }
     }

@@ -17,6 +17,9 @@ export default fp(async (fastify, opts) => {
   }
 
   fastify.decorate('database', () => knex)
+  fastify.addHook('onRequest', async (request, reply) => {
+    request.database = knex
+  })
   fastify.addHook('onClose', () => {
     knex.destroy()
   })
