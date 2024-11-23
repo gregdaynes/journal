@@ -1,6 +1,7 @@
 <% layout('layout.html') %>
+
 <% it.pages.forEach(page => { %>
   <article>
-    <h2><a href="/pages/<%= page.idPage %>"><%= page.metadata.name %></a></h2>
+    <h2><%= page.metadata.name %></h2>
   </article>
 <% }) %>

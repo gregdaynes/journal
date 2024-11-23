@@ -10,6 +10,7 @@ const AppPath = Path.join(import.meta.dirname, '..', 'app.js')
 // needed for testing the application
 function config () {
   return {
+    skipOverride: true, // enable access to decorators
     knexConfig: 'test'
   }
 }

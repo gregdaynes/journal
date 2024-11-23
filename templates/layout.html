@@ -2,8 +2,13 @@
 <html lang="en">
   <head>
     <title><%= it.page.title %></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   </head>
   <body>
-    <%~ it.body %>
+    <%~ include('header.html') %>
+
+    <main class="container-fluid">
+      <%~ it.body %>
+    </main>
   </body>
 </html>

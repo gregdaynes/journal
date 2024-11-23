@@ -12,7 +12,7 @@ export async function up (knex) {
     table.text('payload').notNullable().defaultTo('{}')
     table.timestamp('created').defaultTo(knex.fn.now())
     table.timestamp('updated').defaultTo(knex.fn.now())
-    table.timestamp('deleted').defaultTo(knex.fn.now())
+    table.timestamp('deleted').nullable()
   })
 }
 
