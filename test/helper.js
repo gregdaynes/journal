@@ -2,12 +2,9 @@
 // between our tests.
 
 import helper from 'fastify-cli/helper.js'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import Path from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const AppPath = path.join(__dirname, '..', 'app.js')
+const AppPath = Path.join(import.meta.dirname, '..', 'app.js')
 
 // Fill in this config with all the configurations
 // needed for testing the application
