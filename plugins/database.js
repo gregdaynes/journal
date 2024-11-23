@@ -7,7 +7,14 @@ export default fp(async (fastify, opts) => {
 
   const knex = Knex(knexfile[opts.knexConfig])
 
-  // await knex.migrate.latest()
+  try {
+    fastify.log.info('Running migrations')
+    await knex.migrate.latest()
+    fastify.log.info('Migrations complete')
+  } catch (err) {
+    fastify.log.error(err, 'Migrations failed')
+    throw new Error(err)
+  }
 
   fastify.decorate('database', () => knex)
   fastify.addHook('onClose', () => {
