@@ -10,6 +10,8 @@ export const options = {}
 
 export default async function (fastify, opts) {
   // Place here your custom code!
+  opts = Object.assign({
+  }, opts)
 
   // Do not touch the following lines
 
