@@ -4,4 +4,20 @@
   <article>
     <h2><%= page.metadata.name %></h2>
   </article>
+
+  <% it.blocks.forEach(block => { %>
+    <article>
+      <%= block.payload.data %>
+    </article>
+  <% }) %>
+
+  <form id="block-create" method="post" action="/pages/<%= page.idPage %>/block">
+    <select name="type">
+      <option value="text">Text</option>
+    </select>
+
+    <textarea name="data"></textarea>
+
+    <button type="submit">Add Block</button>
+  </form>
 <% }) %>
