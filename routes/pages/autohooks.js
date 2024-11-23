@@ -8,4 +8,15 @@ export default function (fastify, opts) {
     request.log = log
     reply.log = log
   })
+
+  fastify.addHook('onRequest', async (request, reply) => {
+    request.transformRecordsWithJSON = (recordArray) => {
+      for (const record of recordArray) {
+        record.metadata = JSON.parse(record.metadata)
+        record.payload = JSON.parse(record.payload)
+      }
+
+      return recordArray
+    }
+  })
 }

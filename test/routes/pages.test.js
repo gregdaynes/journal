@@ -155,6 +155,18 @@ test('routes: pages', async (t) => {
       '      \n' +
       '  <article>\n' +
       `    <h2>${page.metadata.name}</h2>\n` +
+      '\n' +
+      '    \n' +
+      `    <form id="block-create" method="post" action="/pages/${page.idPage}/block">\n` +
+      '      <select name="type">\n' +
+      '        <option value="text">Text</option>\n' +
+      '        <option value="javascript">Javascript</option>\n' +
+      '      </select>\n' +
+      '\n' +
+      '      <textarea name="data"></textarea>\n' +
+      '\n' +
+      '      <button type="submit">Add Block</button>\n' +
+      '    </form>\n' +
       '  </article>\n' +
       '    </main>\n' +
       '  </body>\n' +
