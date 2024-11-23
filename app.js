@@ -11,6 +11,7 @@ export const options = {}
 export default async function (fastify, opts) {
   // Place here your custom code!
   opts = Object.assign({
+    knexConfig: process.env.KNEX_CONFIGURATION
   }, opts)
 
   // Do not touch the following lines
