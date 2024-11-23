@@ -8,5 +8,17 @@ test('default root route', async (t) => {
   const res = await app.inject({
     url: '/'
   })
-  assert.deepStrictEqual(JSON.parse(res.payload), { root: true })
+
+  assert.deepStrictEqual(
+    res.body,
+    '<!doctype html>\n' +
+    '<html lang="en">\n' +
+    '  <head>\n' +
+    '    <title>Greeings</title>\n' +
+    '  </head>\n' +
+    '  <body>\n' +
+    '    <h1>Hello world</h1>\n' +
+    '  </body>\n' +
+    '</html>\n'
+  )
 })
