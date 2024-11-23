@@ -50,19 +50,11 @@ export default async function (fastify, opts) {
       throw new Error('Block not found')
     }
 
-    // TODO we want to use a serializer for the data, then stick that in the payload, along with whatever else, but this is fine for now
     const metadata = JSON.stringify({
       type: type || block.metadata.type,
     })
 
-    let payload
-    if (type === 'text') {
-      payload = JSON.stringify({ data })
-    } else if (type === 'javascript') {
-      payload = JSON.stringify({
-        data: serialize(data)
-      })
-    }
+    const payload = serialize(data)
 
     await request.database('blocks')
       .update({

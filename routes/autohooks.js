@@ -3,7 +3,7 @@ export default function (fastify, opts) {
     request.transformRecordsWithJSON = (recordArray) => {
       for (const record of recordArray) {
         record.metadata = JSON.parse(record.metadata)
-        record.payload = JSON.parse(record.payload)
+        record.payload = eval(record.payload)
       }
 
       return recordArray

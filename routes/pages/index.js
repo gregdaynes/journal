@@ -73,7 +73,7 @@ export default async function (fastify, opts) {
     await request.database('pages').insert({
       idPage,
       metadata: JSON.stringify(metadata),
-      payload: JSON.stringify(payload)
+      payload: serialize(payload)
     })
 
     return reply.redirect(`/pages/${idPage}`)
@@ -135,16 +135,16 @@ export default async function (fastify, opts) {
       .leftJoin('blocks', 'page_blocks.idBlock', 'blocks.idBlock')
       .orderBy('order', 'asc')
       .then(blocks => request.transformRecordsWithJSON(blocks))
-      .catch(() => [])
-
+      .catch(err => {
+        request.log.error(err, 'Error reading blocks from db')
+        return []
+      })
 
     for (const block of blocks) {
       if (block.metadata.type === 'text') {
-        block.output = block.payload.data
+        block.output = block.payload
       } else if (block.metadata.type === 'javascript') {
-        block.payload.data = eval(block.payload.data)
-        block.output = eval('(' + block.payload.data + ')')
-        console.log({ data: block.payload.data, output: block.output })
+        block.output = eval('(' + block.payload + ')')
       }
     }
 
@@ -166,19 +166,11 @@ export default async function (fastify, opts) {
     const { idPage } = request.params
     const { type, data } = request.body
 
-    // TODO we want to use a serializer for the data, then stick that in the payload, along with whatever else, but this is fine for now
     const metadata = JSON.stringify({
       type,
     })
 
-    let payload
-    if (type === 'text') {
-      payload = JSON.stringify({ data })
-    } else if (type === 'javascript') {
-      payload = JSON.stringify({
-        data: serialize(data)
-      })
-    }
+    const payload = serialize(data)
 
     const idBlock = request.generateId('block')
     await request.database('blocks').insert({

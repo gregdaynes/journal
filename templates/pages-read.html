@@ -8,7 +8,7 @@
     <p>
       <form id="block-update" method="post" action="/blocks/<%= block.idBlock %>/update">
         <fieldset role="group">
-          <textarea name="data"><%= block.payload.data %></textarea>
+          <textarea name="data"><%= block.payload %></textarea>
           <button class="outline" type="submit">Update</button>
         </fieldset>
 

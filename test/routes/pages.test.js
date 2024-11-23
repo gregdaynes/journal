@@ -15,6 +15,7 @@ test('routes: pages', async (t) => {
       '<!doctype html>\n' +
       '<html lang="en">\n' +
       '  <head>\n' +
+      '    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">\n' +
       '    <title>Create page</title>\n' +
       '    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">\n' +
       '  </head>\n' +
@@ -40,7 +41,7 @@ test('routes: pages', async (t) => {
       '  </nav>\n' +
       '</header>\n' +
       '\n' +
-      '    <main class="container-fluid">\n' +
+      '    <main class="container">\n' +
       '      <form id="pages-new" method="post" action="/pages">\n' +
       '  <label for="name">Name</label>\n' +
       '  <input type="text" id="name" name="name">\n' +
@@ -78,6 +79,7 @@ test('routes: pages', async (t) => {
       '<!doctype html>\n' +
       '<html lang="en">\n' +
       '  <head>\n' +
+      '    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">\n' +
       '    <title>Pages</title>\n' +
       '    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">\n' +
       '  </head>\n' +
@@ -103,7 +105,7 @@ test('routes: pages', async (t) => {
       '  </nav>\n' +
       '</header>\n' +
       '\n' +
-      '    <main class="container-fluid">\n' +
+      '    <main class="container">\n' +
       '        <article>\n' +
       `    <h2><a href="/pages/${page.idPage}">Test</a></h2>\n` +
       '  </article>\n' +
@@ -126,6 +128,7 @@ test('routes: pages', async (t) => {
       '<!doctype html>\n' +
       '<html lang="en">\n' +
       '  <head>\n' +
+      '    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">\n' +
       `    <title>Page ${page.idPage}</title>\n` +
       '    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">\n' +
       '  </head>\n' +
@@ -151,7 +154,7 @@ test('routes: pages', async (t) => {
       '  </nav>\n' +
       '</header>\n' +
       '\n' +
-      '    <main class="container-fluid">\n' +
+      '    <main class="container">\n' +
       '      \n' +
       '  <article>\n' +
       `    <h2>${page.metadata.name}</h2>\n` +
