@@ -10,7 +10,7 @@
   "scripts": {
     "test": "node --test test/**/*.test.js",
     "start": "fastify start -l info app.js",
-    "dev": "fastify start -w -l debug -P app.js",
+    "dev": "fastify start -w -l debug -P -a 0.0.0.0 app.js",
     "lint": "npx eslint",
     "lint:fix": "npx eslint --fix"
   },
@@ -20,6 +20,7 @@
   "dependencies": {
     "@fastify/autoload": "^6.0.0",
     "@fastify/formbody": "^8.0.1",
+    "@fastify/multipart": "^9.0.1",
     "@fastify/sensible": "^6.0.0",
     "@fastify/view": "^10.0.1",
     "better-sqlite3": "^11.5.0",
