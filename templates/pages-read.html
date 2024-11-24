@@ -7,12 +7,12 @@
     <% it.blocks.forEach(block => { %>
       <details open>
         <summary><%= block.metadata.type %></summary>
-        <p>
+
+        <div>
           <% if (block.metadata.type !== 'image') { %>
-            <form id="block-update" method="post" action="/blocks/<%= block.idBlock %>/update">
+            <form id=`block-update-${block.idBlock}` method="post" action="/blocks/<%= block.idBlock %>/update">
               <fieldset role="group">
                 <textarea name="data"><%= block.payload %></textarea>
-                <button class="outline" type="submit">Update</button>
               </fieldset>
 
               <input type="hidden" name="type" value="<%= block.metadata.type %>">
@@ -21,9 +21,7 @@
           <% } %>
 
           <% if (block.metadata.type === 'javascript') { %>
-            <figure>
-            <%= block.output %>
-            </figure>
+            <textarea readonly><%= block.output %></textarea>
           <% } %>
 
           <% if (block.metadata.type === 'image') { %>
@@ -31,9 +29,12 @@
             <img src="<%= block.output %>">
           </figure>
           <% } %>
+        </div>
 
+        <div role="group">
+          <button class="outline" type="submit" form=`block-update-${block.idBlock}`>Update</button>
           <a class="outline secondary" href="/pages/<%= page.idPage %>/block/<%= block.idBlock %>/delete" role="button">Delete</a>
-        </p>
+        </div>
       </details>
 
       <hr>

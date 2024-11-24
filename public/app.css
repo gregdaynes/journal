@@ -1,3 +1,8 @@
 fieldset[disabled] {
   display: none;
 }
+
+textarea[readonly] {
+  border-top: var(--pico-border-width) solid var(--pico-primary);
+  color: var(--pico-muted-color)
+}
