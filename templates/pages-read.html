@@ -30,25 +30,32 @@
     </p>
     <% }) %>
 
-    <form id="block-create" method="post" action="/pages/<%= page.idPage %>/block">
-      <select name="type">
-        <option value="text">Text</option>
-        <option value="javascript">Javascript</option>
-      </select>
+    <block-form>
+      <form id="block-create" method="post" action="/pages/<%= page.idPage %>/block">
+        <select name="type">
+          <option value="text" data-type="text">Text</option>
+          <option value="javascript" data-type="text">Javascript</option>
+        </select>
 
-      <textarea name="data"></textarea>
+        <fieldset name="text-area">
+          <textarea name="data"></textarea>
+        </fieldset>
 
-      <button type="submit">Add Block</button>
-    </form>
+        <button type="submit">Add Block</button>
+      </form>
 
-    <form id="block-create" method="post" action="/pages/<%= page.idPage %>/block-file" enctype="multipart/form-data">
-      <select name="type">
-        <option value="image">Image</option>
-      </select>
+      <form id="block-create-file" method="post" action="/pages/<%= page.idPage %>/block-file" enctype="multipart/form-data">
+        <select name="type">
+          <option value="file" data-type="file">File</option>
+        </select>
 
-      <input type="file" id="file" name="file">
+        <fieldset name="file-area">
+          <input type="file" id="file" name="file">
+        </fieldset>
 
-      <button type="submit">Add Block</button>
-    </form>
+        <button type="submit">Add Block</button>
+      </form>
+    </block-form>
   </article>
 <% }) %>
+

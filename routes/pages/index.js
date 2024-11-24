@@ -146,7 +146,12 @@ export default async function (fastify, opts) {
       if (block.metadata.type === 'text') {
         block.output = block.payload
       } else if (block.metadata.type === 'javascript') {
-        block.output = eval('(' + block.payload + ')')
+        try {
+          block.output = eval('(' + block.payload + ')')
+        } catch (err) {
+          block.output = err.toString()
+          request.log.error(err, 'Error rendering payload')
+        }
       } else if (block.metadata.type === 'image') {
         block.output = `/files/${idPage}/${block.idBlock}`
       }
@@ -168,7 +173,7 @@ export default async function (fastify, opts) {
     schema: routeCreateBlockSchema,
   }, async (request, reply) => {
     const { idPage } = request.params
-    let { type, data } = request.body
+    const { type, data } = request.body
 
     let payload
     if (type === 'image') {
@@ -210,18 +215,18 @@ export default async function (fastify, opts) {
    * Create file block on page
    */
   fastify.post('/:idPage/block-file', {
-    //schema: routeCreateFileBlockSchema,
+    // schema: routeCreateFileBlockSchema,
   }, async (request, reply) => {
     const { idPage } = request.params
 
     const fileData = await request.file()
 
-    //fileData.file // stream
-    //fileData.fields // other parsed parts
-    //fileData.fieldname
-    //fileData.filename
-    //fileData.encoding
-    //fileData.mimetype
+    // fileData.file // stream
+    // fileData.fields // other parsed parts
+    // fileData.fieldname
+    // fileData.filename
+    // fileData.encoding
+    // fileData.mimetype
 
     const metadata = JSON.stringify({
       type: 'image',
