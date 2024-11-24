@@ -5,64 +5,41 @@
     <h2><%= page.metadata.name %></h2>
 
     <% it.blocks.forEach(block => { %>
-    <details open>
-      <summary><%= block.metadata.type %></summary>
-      <p>
-        <% if (block.metadata.type !== 'image') { %>
-          <form id="block-update" method="post" action="/blocks/<%= block.idBlock %>/update">
-            <fieldset role="group">
-              <textarea name="data"><%= block.payload %></textarea>
-              <button class="outline" type="submit">Update</button>
-            </fieldset>
+      <details open>
+        <summary><%= block.metadata.type %></summary>
+        <p>
+          <% if (block.metadata.type !== 'image') { %>
+            <form id="block-update" method="post" action="/blocks/<%= block.idBlock %>/update">
+              <fieldset role="group">
+                <textarea name="data"><%= block.payload %></textarea>
+                <button class="outline" type="submit">Update</button>
+              </fieldset>
 
-            <input type="hidden" name="type" value="<%= block.metadata.type %>">
-            <input type="hidden" name="idPage" value="<%= page.idPage %>">
-          </form>
-        <% } %>
+              <input type="hidden" name="type" value="<%= block.metadata.type %>">
+              <input type="hidden" name="idPage" value="<%= page.idPage %>">
+            </form>
+          <% } %>
 
-        <% if (block.metadata.type === 'javascript') { %>
+          <% if (block.metadata.type === 'javascript') { %>
+            <figure>
+            <%= block.output %>
+            </figure>
+          <% } %>
+
+          <% if (block.metadata.type === 'image') { %>
           <figure>
-          <%= block.output %>
+            <img src="<%= block.output %>">
           </figure>
-        <% } %>
+          <% } %>
 
-        <% if (block.metadata.type === 'image') { %>
-        <figure>
-          <img src="<%= block.output %>">
-        </figure>
-        <% } %>
+          <a class="outline secondary" href="/pages/<%= page.idPage %>/block/<%= block.idBlock %>/delete" role="button">Delete</a>
+        </p>
+      </details>
 
-        <a class="outline secondary" href="/pages/<%= page.idPage %>/block/<%= block.idBlock %>/delete" role="button">Delete</a>
-      </p>
-    </details>
+      <hr>
     <% }) %>
 
-    <block-form>
-      <form id="block-create" method="post" action="/pages/<%= page.idPage %>/block">
-        <select name="type">
-          <option value="text" data-type="text">Text</option>
-          <option value="javascript" data-type="text">Javascript</option>
-        </select>
-
-        <fieldset name="text-area">
-          <textarea name="data"></textarea>
-        </fieldset>
-
-        <button type="submit">Add Block</button>
-      </form>
-
-      <form id="block-create-file" method="post" action="/pages/<%= page.idPage %>/block-file" enctype="multipart/form-data">
-        <select name="type">
-          <option value="file" data-type="file">File</option>
-        </select>
-
-        <fieldset name="file-area">
-          <input type="file" id="file" name="file">
-        </fieldset>
-
-        <button type="submit">Add Block</button>
-      </form>
-    </block-form>
+    <%~ include('block-form.html', { page }) %>
   </article>
 <% }) %>
 
