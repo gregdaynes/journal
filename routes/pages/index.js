@@ -61,6 +61,24 @@ const routeCreateBlockSchema = {
   }
 }
 
+const routeDeleteBlockSchema = {
+  params: {
+    $id: 'app:pages:block:delete:params',
+    type: 'object',
+    properties: {
+      idPage: {
+        type: 'string',
+        pattern: 'PAGE_[0-7][0-9A-HJKMNP-TV-Z]{25}'
+      },
+      idBlock: {
+        type: 'string',
+        pattern: 'BLOCK_[0-7][0-9A-HJKMNP-TV-Z]{25}'
+      }
+    },
+    required: ['idPage', 'idBlock']
+  }
+}
+
 export default async function (fastify, opts) {
   /**
    * Create page
@@ -221,13 +239,6 @@ export default async function (fastify, opts) {
 
     const fileData = await request.file()
 
-    // fileData.file // stream
-    // fileData.fields // other parsed parts
-    // fileData.fieldname
-    // fileData.filename
-    // fileData.encoding
-    // fileData.mimetype
-
     const metadata = JSON.stringify({
       type: 'image',
       filename: fileData.filename,
@@ -258,6 +269,26 @@ export default async function (fastify, opts) {
       idBlock,
       order: nextOrder,
     })
+
+    return reply.redirect(`/pages/${idPage}`)
+  })
+
+  /**
+   * Delete file block on page
+   */
+  fastify.get('/:idPage/block/:idBlock/delete', {
+     schema: routeDeleteBlockSchema,
+  }, async (request, reply) => {
+    const { idPage, idBlock } = request.params
+
+    await request.database('page_blocks')
+      .where({
+        idPage,
+        idBlock,
+      })
+      .update({
+        deleted: new Date()
+      })
 
     return reply.redirect(`/pages/${idPage}`)
   })
