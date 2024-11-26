@@ -1,4 +1,9 @@
 /* global localStorage, HTMLElement, customElements  */
+
+//
+// Scroll Position
+//
+
 document.addEventListener('DOMContentLoaded', function () {
   const scrollY = localStorage.getItem('scrollY')
   if (scrollY) window.scrollTo(0, scrollY)
@@ -7,6 +12,40 @@ document.addEventListener('DOMContentLoaded', function () {
 window.onbeforeunload = function () {
   localStorage.setItem('scrollY', window.scrollY)
 }
+
+//
+// Add Edit Button to Block Form Controls
+//
+
+const blockFormControls = document.querySelectorAll('details > [role=group]')
+for (const controlContainer of blockFormControls) {
+  const form = controlContainer.closest('details').querySelector('form')
+  const output = controlContainer.closest('details').querySelector('.block-output')
+
+  if (form) {
+    const editButton = document.createElement('button')
+    editButton.classList.add('outline', 'contrast')
+    editButton.textContent = 'Edit'
+    form.classList.toggle('hidden')
+
+    editButton.addEventListener('click', () => {
+      form.classList.toggle('hidden')
+      output.classList.toggle('hidden')
+
+      if (form.classList.contains('hidden')) {
+        editButton.textContent = 'Edit'
+      } else {
+        editButton.textContent = 'Cancel'
+      }
+    })
+
+    controlContainer.prepend(editButton)
+  }
+}
+
+//
+// Custom Elements
+//
 
 class BlockForm extends HTMLElement {
   constructor () {
