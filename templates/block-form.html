@@ -6,8 +6,19 @@
     </select>
 
     <fieldset name="text-area">
-
       <textarea name="data"></textarea>
+    </fieldset>
+
+    <button type="submit">Add Block</button>
+  </form>
+
+  <form id="block-create-link" method="post" action="/pages/<%= it.page.idPage %>/block">
+    <select name="type">
+      <option value="link" data-type="link">Link</option>
+    </select>
+
+    <fieldset name="link-area">
+      <input type="url" name="data">
     </fieldset>
 
     <button type="submit">Add Block</button>

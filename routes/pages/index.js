@@ -47,7 +47,7 @@ const routeCreateBlockSchema = {
       type: {
         type: 'string',
         oneOf: [
-          { enum: ['text', 'javascript', 'image'] }
+          { enum: ['text', 'javascript', 'image', 'link'] }
         ]
       },
       data: {
@@ -100,7 +100,7 @@ export default async function (fastify, opts) {
     return reply.redirect(`/pages/${idPage}`)
   })
 
-  /**
+  /*
    * List pages
    */
   fastify.get('/', {
@@ -172,6 +172,13 @@ export default async function (fastify, opts) {
         }
       } else if (block.metadata.type === 'image') {
         block.output = `/files/${idPage}/${block.idBlock}`
+      } else if (block.metadata.type === 'link') {
+        const payload = JSON.parse(block.payload)
+
+        block.output = {
+          url: payload.url,
+          cachedUrl: `/files/${idPage}/${block.idBlock}`
+        }
       }
     }
 
@@ -193,9 +200,32 @@ export default async function (fastify, opts) {
     const { idPage } = request.params
     const { type, data } = request.body
 
+    // TODO this is a prime candidate for a strategy pattern implementation
     let payload
     if (type === 'image') {
       payload = await request.file()
+    } else if (type === 'link') {
+      try {
+        const response = await fetch(new URL(data), {
+          method: 'GET'
+        })
+
+        let chunks = []
+        for await (const chunk of response.body) {
+          chunks.push(Buffer.from(chunk));
+        }
+
+        payload = {
+          url: data,
+          page: Buffer.concat(chunks).toString("utf-8"),
+        }
+      } catch (err) {
+        payload = {
+          url: data
+        }
+      } finally {
+        payload = serialize(payload)
+      }
     } else {
       payload = serialize(data)
     }

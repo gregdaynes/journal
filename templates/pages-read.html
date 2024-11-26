@@ -10,9 +10,15 @@
 
         <div>
           <% if (block.metadata.type !== 'image') { %>
-            <form id=`block-update-${block.idBlock}` method="post" action="/blocks/<%= block.idBlock %>/update">
+          <form id='block-update-<%= block.idBlock %>' method="post" action="/blocks/<%= block.idBlock %>/update">
               <fieldset role="group">
-                <textarea name="data"><%= block.payload %></textarea>
+                <% if (block.metadata.type === 'text' || block.metadata.type === 'javascript') { %>
+                  <textarea name="data"><%= block.payload %></textarea>
+                <% } %>
+
+                <% if (block.metadata.type === 'link') { %>
+                  <input type="url" name="data" value="<%= block.output.url %>">
+                <% } %>
               </fieldset>
 
               <input type="hidden" name="type" value="<%= block.metadata.type %>">
@@ -20,19 +26,30 @@
             </form>
           <% } %>
 
+          <% if (block.metadata.type === 'text') { %>
+            <article class="block-output"><%= block.output %></article>
+          <% } %>
+
           <% if (block.metadata.type === 'javascript') { %>
-            <textarea readonly><%= block.output %></textarea>
+            <textarea readonly class="block-output"><%= block.output %></textarea>
           <% } %>
 
           <% if (block.metadata.type === 'image') { %>
-          <figure>
+          <figure class="block-output">
             <img src="<%= block.output %>">
           </figure>
+          <% } %>
+
+          <% if (block.metadata.type === 'link') { %>
+          <article class="block-output">
+            <a href="<%= block.output.url %>" target=_blank><%= block.output.url %></a>
+            <a href="<%= block.output.cachedUrl %>" target=_blank>( Cached )</a>
+          </article>
           <% } %>
         </div>
 
         <div role="group">
-          <button class="outline" type="submit" form=`block-update-${block.idBlock}`>Update</button>
+          <button class="outline" type="submit" form="block-update-<%= block.idBlock %>">Update</button>
           <a class="outline secondary" href="/pages/<%= page.idPage %>/block/<%= block.idBlock %>/delete" role="button">Delete</a>
         </div>
       </details>

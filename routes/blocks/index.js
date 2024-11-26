@@ -23,7 +23,7 @@ const routeUpdateSchema = {
       type: {
         type: 'string',
         oneOf: [
-          { enum: ['text', 'javascript'] }
+          { enum: ['text', 'javascript', 'link'] }
         ]
       },
       data: {
@@ -54,7 +54,32 @@ export default async function (fastify, opts) {
       type: type || block.metadata.type,
     })
 
-    const payload = serialize(data)
+    let payload
+    if (type === 'link') {
+      try {
+        const response = await fetch(new URL(data), {
+          method: 'GET'
+        })
+
+        let chunks = []
+        for await (const chunk of response.body) {
+          chunks.push(Buffer.from(chunk));
+        }
+
+        payload = {
+          url: data,
+          page: Buffer.concat(chunks).toString("utf-8"),
+        }
+      } catch (err) {
+        payload = {
+          url: data
+        }
+      } finally {
+        payload = serialize(payload)
+      }
+    } else {
+      payload = serialize(data)
+    }
 
     await request.database('blocks')
       .update({

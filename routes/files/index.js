@@ -16,9 +16,17 @@ export default function (fastify, opts) {
         return []
       })
 
-    const buffer = Buffer.from(block.payload, 'base64')
+    let output
+    if (block.metadata.type === 'image') {
+      output = Buffer.from(block.payload, 'base64')
+    }
+
+    if (block.metadata.type === 'link') {
+      output = JSON.parse(block.payload).page
+      output = output.replace('</head>', `<style>:root{color-scheme:dark light}</style></head>`)
+    }
 
     reply.headers({ 'content-type': block.metadata.mimetype })
-    return reply.send(buffer)
+    return reply.send(output)
   })
 }
