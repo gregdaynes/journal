@@ -1,9 +1,9 @@
 <% layout('layout.html') %>
 
 <% it.pages.forEach(page => { %>
-  <article>
-    <h2><%= page.metadata.name %></h2>
+  <h2><%= page.metadata.name %></h2>
 
+  <article>
     <% it.blocks.forEach(block => { %>
       <details open>
         <summary><%= block.metadata.type %></summary>

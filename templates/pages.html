@@ -1,4 +1,8 @@
 <% layout('layout.html') %>
+<article>
+  <a href="/pages/new" role="button">Create page</a>
+</article>
+
 <% it.pages.forEach(page => { %>
   <article>
     <h2><a href="/pages/<%= page.idPage %>"><%= page.metadata.name %></a></h2>
