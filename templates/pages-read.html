@@ -4,8 +4,8 @@
   <h2><%= page.metadata.name %></h2>
 
   <% it.blocks.forEach(block => { %>
-    <article order="<%= block.order %>">
-      <details open>
+    <article order="<%= block.order %>" data-id-Block="<%= block.idBlock %>" data-id-page="<%= block.idPage %>">
+      <details <% if (block.open) { %>open<% } %>>
         <summary><%= block.metadata.type %></summary>
 
         <div>

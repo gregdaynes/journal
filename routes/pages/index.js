@@ -82,6 +82,34 @@ const routeDeleteBlockSchema = {
   }
 }
 
+const routeUpdateBlockStateSchema = {
+  params: {
+    $id: 'app:pages:block:update-state:params',
+    type: 'object',
+    properties: {
+      idPage: {
+        type: 'string',
+        pattern: 'PAGE_[0-7][0-9A-HJKMNP-TV-Z]{25}'
+      },
+      idBlock: {
+        type: 'string',
+        pattern: 'BLOCK_[0-7][0-9A-HJKMNP-TV-Z]{25}'
+      }
+    },
+    required: ['idPage', 'idBlock']
+  },
+  query: {
+    $id: 'app:pages:block:update-state:query',
+    type: 'object',
+    properties: {
+      open: {
+        type: 'boolean',
+      },
+    },
+    required: ['open']
+  }
+}
+
 export default async function (fastify, opts) {
   /**
    * Create page
@@ -333,6 +361,28 @@ export default async function (fastify, opts) {
       })
       .update({
         deleted: new Date()
+      })
+
+    return reply.redirect(`/pages/${idPage}`)
+  })
+
+  /**
+   * Set block open state
+   */
+  fastify.get('/:idPage/block/:idBlock/state', {
+     schema: routeUpdateBlockStateSchema,
+  }, async (request, reply) => {
+    const { idPage, idBlock } = request.params
+    const { open } = request.query
+
+    await request.database('page_blocks')
+      .where({
+        idPage,
+        idBlock,
+      })
+      .update({
+        updated: new Date(),
+        open
       })
 
     return reply.redirect(`/pages/${idPage}`)

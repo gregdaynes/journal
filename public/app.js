@@ -86,6 +86,23 @@ for (const block of blocks) {
 }
 
 //
+// Block Open/Close state
+//
+
+for (const block of blocks) {
+  block.querySelector('details').addEventListener('toggle', async function () {
+    const state = this.hasAttribute('open')
+    const { idBlock, idPage } = block.dataset
+
+    try {
+      await fetch(`/pages/${idPage}/block/${idBlock}/state?open=${state}`)
+    } catch (err) {
+      console.log(err)
+    }
+  })
+}
+
+//
 // Custom Elements
 //
 
