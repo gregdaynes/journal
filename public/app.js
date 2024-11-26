@@ -44,6 +44,22 @@ for (const controlContainer of blockFormControls) {
 }
 
 //
+// Modal create form
+//
+
+const templateClone = document.querySelector('#add-block-template').content.cloneNode(true);
+const dialog = templateClone.querySelector('dialog')
+const createBlockForm = document.querySelector('#block-create')
+const openCreateModalButton = document.createElement('button')
+openCreateModalButton.textContent = 'Add Block'
+openCreateModalButton.addEventListener('click', () => {
+  dialog.showModal()
+})
+createBlockForm.after(openCreateModalButton)
+createBlockForm.after(dialog)
+dialog.append(createBlockForm)
+
+//
 // Custom Elements
 //
 

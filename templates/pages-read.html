@@ -53,11 +53,17 @@
           <a class="outline secondary" href="/pages/<%= page.idPage %>/block/<%= block.idBlock %>/delete" role="button">Delete</a>
         </div>
       </details>
-
-      <hr>
     <% }) %>
+  </article>
 
+  <article>
     <%~ include('block-form.html', { page }) %>
+
+    <template id="add-block-template">
+      <dialog id="create-modal">
+        <form method="close"><button>close</button></form>
+      </dialog>
+    </template>
   </article>
 <% }) %>
 
