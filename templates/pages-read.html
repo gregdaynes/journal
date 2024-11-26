@@ -3,8 +3,8 @@
 <% it.pages.forEach(page => { %>
   <h2><%= page.metadata.name %></h2>
 
-  <article>
-    <% it.blocks.forEach(block => { %>
+  <% it.blocks.forEach(block => { %>
+    <article order="<%= block.order %>">
       <details open>
         <summary><%= block.metadata.type %></summary>
 
@@ -53,17 +53,17 @@
           <a class="outline secondary" href="/pages/<%= page.idPage %>/block/<%= block.idBlock %>/delete" role="button">Delete</a>
         </div>
       </details>
-    <% }) %>
-  </article>
+    </article>
+  <% }) %>
 
-  <article>
-    <%~ include('block-form.html', { page }) %>
+  <%~ include('block-form.html', { page }) %>
 
-    <template id="add-block-template">
-      <dialog id="create-modal">
-        <form method="close"><button>close</button></form>
-      </dialog>
-    </template>
-  </article>
+  <template id="add-block-template">
+    <dialog id="create-modal">
+      <form method="dialog">
+        <button aria-label="close" formnovalidate>&times;</button>
+      </form>
+    </dialog>
+  </template>
 <% }) %>
 

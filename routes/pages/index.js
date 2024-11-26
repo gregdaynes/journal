@@ -55,6 +55,9 @@ const routeCreateBlockSchema = {
       },
       file: {
         type: 'string'
+      },
+      order: {
+        type: 'string'
       }
     },
     required: ['type']
@@ -198,7 +201,7 @@ export default async function (fastify, opts) {
     schema: routeCreateBlockSchema,
   }, async (request, reply) => {
     const { idPage } = request.params
-    const { type, data } = request.body
+    let { type, data, order } = request.body
 
     // TODO this is a prime candidate for a strategy pattern implementation
     let payload
@@ -246,14 +249,26 @@ export default async function (fastify, opts) {
       .where({ idPage, deleted: null })
       .orderBy('order', 'asc')
 
-    const nextOrder = existingBlocks.reduce((acc, block) => {
-      return block.order > acc && block.order
-    }, 0)
+    if (order) {
+      order = Number.parseInt(order)
+      const blocksToReorder = existingBlocks.filter(block => block.order > order)
+
+      for (const block of blocksToReorder) {
+        await request.database('page_blocks')
+          .where({ idPage, idBlock: block.idBlock })
+          .update('order', Number.parseInt(block.order) + 1)
+      }
+
+    } else {
+      order = existingBlocks.reduce((acc, block) => {
+        return block.order >= acc && block.order
+      }, 0)
+    }
 
     await request.database('page_blocks').insert({
       idPage,
       idBlock,
-      order: nextOrder,
+      order: order + 1,
     })
 
     return reply.redirect(`/pages/${idPage}`)

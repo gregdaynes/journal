@@ -49,21 +49,49 @@ for (const controlContainer of blockFormControls) {
 
 const templateClone = document.querySelector('#add-block-template').content.cloneNode(true);
 const dialog = templateClone.querySelector('dialog')
-const createBlockForm = document.querySelector('#block-create')
+const createBlockForm = document.querySelector('block-form')
 const openCreateModalButton = document.createElement('button')
 openCreateModalButton.textContent = 'Add Block'
 openCreateModalButton.addEventListener('click', () => {
   dialog.showModal()
 })
-createBlockForm.after(openCreateModalButton)
 createBlockForm.after(dialog)
 dialog.append(createBlockForm)
+dialog.addEventListener('close', function () {
+  createBlockForm.removeAttribute('order')
+})
+
+//
+// Position Add Block Buttons
+//
+
+const blocks = document.querySelectorAll('article:has(details)')
+if (!blocks.length) {
+  const openCreateModalButton = document.createElement('button')
+  openCreateModalButton.textContent = 'Add Block'
+  openCreateModalButton.addEventListener('click', () => {
+    dialog.showModal()
+  })
+  document.querySelector('main').append(openCreateModalButton)
+}
+
+for (const block of blocks) {
+  const openCreateModalButton = document.createElement('button')
+  openCreateModalButton.textContent = 'Add Block'
+  openCreateModalButton.addEventListener('click', () => {
+    createBlockForm.setAttribute('order', block.getAttribute('order'))
+    dialog.showModal()
+  })
+  block.after(openCreateModalButton)
+}
 
 //
 // Custom Elements
 //
 
 class BlockForm extends HTMLElement {
+  static observedAttributes = ['order'];
+
   constructor () {
     super()
 
@@ -74,6 +102,7 @@ class BlockForm extends HTMLElement {
       typeSelect: textForm.querySelector('select'),
       fieldsets: () => textForm.querySelectorAll(`fieldset`),
       lastFieldset: () => textForm.querySelector(`fieldset:last-of-type`),
+      order: textForm.querySelector('[name=order]'),
     }
 
     const dataForm = this.querySelector('#block-create-file')
@@ -150,6 +179,11 @@ class BlockForm extends HTMLElement {
           .removeAttribute('disabled')
         break
     }
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    this.textForm.order.removeAttribute('disabled')
+    this.textForm.order.value = newValue
   }
 }
 
